@@ -7,6 +7,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Onboarding from "./screens/Onboarding";
 import Home from "./screens/Home";
+import Header from "./components/Header";
 import Profile from "./screens/Profile";
 
 export interface RootStackParamList {
@@ -73,12 +74,28 @@ const App: FC = () => {
         {isOnboardingComplete ? (
           <Stack.Navigator>
             <Stack.Screen name="Home">
-              {(props) => (
-                <Home {...props} user={userData} onLogout={handleLogout} />
-              )}
+              {(props) => <Home {...props} user={userData} />}
             </Stack.Screen>
-            <Stack.Screen name="Profile">
-              {(props) => <Profile {...props} user={userData} />}
+            <Stack.Screen
+              name="Profile"
+              options={{
+                header: () => (
+                  <Header
+                    logo={true}
+                    showBackButton={true}
+                    backgroundColor="#fff"
+                  />
+                ),
+              }}
+            >
+              {(props) => (
+                <Profile
+                  {...props}
+                  user={userData}
+                  onLogout={handleLogout}
+                  onUserUpdate={handleOnboardingComplete}
+                />
+              )}
             </Stack.Screen>
           </Stack.Navigator>
         ) : (

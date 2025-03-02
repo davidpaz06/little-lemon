@@ -15,6 +15,7 @@ interface FormField {
   name: string;
   label: string;
   placeholder: string;
+  value?: string;
   secureTextEntry?: boolean;
   keyboardType?: "default" | "email-address" | "numeric" | "phone-pad";
   autoCapitalize?: "none" | "sentences" | "words" | "characters";
@@ -24,9 +25,22 @@ interface FormField {
 interface FormProps {
   fields: FormField[];
   onSubmit: (formData: { [key: string]: string }) => void;
+  containerStyle?: object;
+  labelStyle?: object;
+  inputStyle?: object;
+  buttonStyle?: object;
+  buttonTextStyle?: object;
 }
 
-const Form: FC<FormProps> = ({ fields, onSubmit }: FormProps) => {
+const Form: FC<FormProps> = ({
+  fields,
+  onSubmit,
+  containerStyle,
+  labelStyle,
+  inputStyle,
+  buttonStyle,
+  buttonTextStyle,
+}: FormProps) => {
   const [formData, setFormData] = useState<{ [key: string]: string }>({});
 
   const handleChange = (name: string, value: string) => {
@@ -46,25 +60,26 @@ const Form: FC<FormProps> = ({ fields, onSubmit }: FormProps) => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
+      style={[styles.container, containerStyle]}
       keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
     >
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {fields.map((field) => (
           <View key={field.name} style={styles.fieldContainer}>
-            <Text style={styles.label}>{field.label}</Text>
+            <Text style={[styles.label, labelStyle]}>{field.label}</Text>
             <TextInput
               placeholder={field.placeholder}
               secureTextEntry={field.secureTextEntry}
               keyboardType={field.keyboardType}
               autoCapitalize={field.autoCapitalize}
+              value={field.value}
               onChangeText={(value) => handleChange(field.name, value)}
-              style={styles.input}
+              style={[styles.input, inputStyle]}
             />
           </View>
         ))}
-        <Pressable style={styles.button} onPress={handleSubmit}>
-          <Text style={styles.buttonText}>Submit</Text>
+        <Pressable style={[styles.button, buttonStyle]} onPress={handleSubmit}>
+          <Text style={[styles.buttonText, buttonTextStyle]}>Submit</Text>
         </Pressable>
       </ScrollView>
     </KeyboardAvoidingView>

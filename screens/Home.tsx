@@ -7,22 +7,15 @@ type HomeScreenNavigationProp = NavigationProp<RootStackParamList, "Home">;
 
 interface HomeProps {
   user: { [key: string]: string } | null;
-  onLogout: () => void;
 }
 
-const Home: FC<HomeProps> = ({ user, onLogout }) => {
+const Home: FC<HomeProps> = ({ user }) => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.text}>Welcome to the Home Screen!</Text>
-      {user && (
-        <View>
-          <Text>Name: {user.firstName}</Text>
-          <Text>Email: {user.email}</Text>
-        </View>
-      )}
-      <Button title="Logout" onPress={onLogout} />
+      {user && <View></View>}
       <Button
         title="Profile"
         onPress={() => navigation.navigate("Profile")}
