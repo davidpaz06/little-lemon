@@ -75,7 +75,18 @@ const App: FC = () => {
         <StatusBar backgroundColor="transparent" />
         {isOnboardingComplete ? (
           <Stack.Navigator>
-            <Stack.Screen name="Home">
+            <Stack.Screen
+              name="Home"
+              options={{
+                header: () => (
+                  <Header
+                    logo={true}
+                    showBackButton={false}
+                    backgroundColor="#fff"
+                  />
+                ),
+              }}
+            >
               {(props) => <Home {...props} user={userData} />}
             </Stack.Screen>
             <Stack.Screen

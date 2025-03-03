@@ -5,16 +5,19 @@ import {
   TouchableOpacity,
   Text,
   StatusBar,
+  Pressable,
 } from "react-native";
-import { FC } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { FC, useEffect, useState } from "react";
+import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface HeaderProps {
   title?: string;
   logo?: boolean;
   showBackButton?: boolean;
   onBackPress?: () => void;
+  onImagePress?: () => void;
   backgroundColor?: string;
 }
 
@@ -23,10 +26,25 @@ const Header: FC<HeaderProps> = ({
   logo,
   showBackButton,
   onBackPress,
+  onImagePress,
   backgroundColor,
 }) => {
   const navigation = useNavigation();
   const isLightBackground = "#fff";
+  const [userImage, setUserImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadUserImage = async () => {
+      const storedUserData = await AsyncStorage.getItem("userData");
+      if (storedUserData) {
+        const user = JSON.parse(storedUserData);
+        if (user.image) {
+          setUserImage(user.image);
+        }
+      }
+    };
+    loadUserImage();
+  }, []);
 
   return (
     <View>
@@ -54,6 +72,15 @@ const Header: FC<HeaderProps> = ({
             source={require("../assets/images/Logo.png")}
             style={styles.logo}
           />
+        )}
+
+        {userImage && (
+          <Pressable
+            style={styles.imageContainer}
+            onPress={() => navigation.navigate("Profile")}
+          >
+            <Image source={{ uri: userImage }} style={styles.avatar} />
+          </Pressable>
         )}
       </View>
     </View>
@@ -95,6 +122,25 @@ const styles = StyleSheet.create({
     width: "75%",
     height: 50,
     resizeMode: "contain",
+  },
+
+  imageContainer: {
+    position: "absolute",
+    right: 16,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "transparent",
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "silver",
+  },
+
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
   },
 });
 
