@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, SafeAreaView } from "react-native";
-import { FC } from "react";
+import { FC, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Header from "../components/Header";
 import Form from "../components/Form";
@@ -9,6 +9,9 @@ interface OnboardingProps {
 }
 
 const Onboarding: FC<OnboardingProps> = ({ onComplete }) => {
+  const [formData, setFormData] = useState<{ [key: string]: string } | null>(
+    null
+  );
   const handleFormSubmit = async (formData: { [key: string]: string }) => {
     console.log("Form Data:", formData);
     await AsyncStorage.setItem("isOnboardingComplete", "true");
@@ -37,7 +40,12 @@ const Onboarding: FC<OnboardingProps> = ({ onComplete }) => {
     <SafeAreaView style={styles.container}>
       <Header />
       <Text style={styles.text}>Let us get to know you!</Text>
-      <Form fields={formFields} onSubmit={handleFormSubmit} />
+      <Form
+        fields={formFields}
+        formData={formData || {}}
+        setFormData={setFormData}
+        onSubmit={handleFormSubmit}
+      />
     </SafeAreaView>
   );
 };

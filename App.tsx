@@ -55,6 +55,7 @@ const App: FC = () => {
     setIsLoading(true);
     await AsyncStorage.removeItem("isOnboardingComplete");
     await AsyncStorage.removeItem("userData");
+    await AsyncStorage.removeItem("checkboxes");
     setIsOnboardingComplete(false);
     setUserData(null);
     setIsLoading(false);
