@@ -24,6 +24,8 @@ interface FormField {
 
 interface FormProps {
   fields: FormField[];
+  formData: { [key: string]: string };
+  setFormData: (data: { [key: string]: string }) => void;
   onSubmit: (formData: { [key: string]: string }) => void;
   containerStyle?: object;
   labelStyle?: object;
@@ -34,6 +36,8 @@ interface FormProps {
 
 const Form: FC<FormProps> = ({
   fields,
+  formData,
+  setFormData,
   onSubmit,
   containerStyle,
   labelStyle,
@@ -41,10 +45,10 @@ const Form: FC<FormProps> = ({
   buttonStyle,
   buttonTextStyle,
 }: FormProps) => {
-  const [formData, setFormData] = useState<{ [key: string]: string }>({});
+  // const [formData, setFormData] = useState<{ [key: string]: string }>({});
 
   const handleChange = (name: string, value: string) => {
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = () => {
@@ -89,13 +93,14 @@ const Form: FC<FormProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: "100%",
   },
   scrollContainer: {
     alignItems: "center",
     padding: 16,
   },
   fieldContainer: {
-    marginBottom: 16,
+    marginBottom: 20,
   },
   label: {
     fontSize: 16,
@@ -116,7 +121,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 8,
     alignItems: "center",
-    marginVertical: 32,
   },
   buttonText: {
     color: "#000",

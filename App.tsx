@@ -47,6 +47,7 @@ const App: FC = () => {
       setUserData(JSON.parse(storedUserData));
     }
     setIsOnboardingComplete(true);
+    console.log("data", userData);
     setIsLoading(false);
   };
 
